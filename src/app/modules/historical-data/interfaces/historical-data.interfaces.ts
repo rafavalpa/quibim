@@ -21,4 +21,5 @@ export interface ApiResponseDataElement{
 
 export interface ApiResponseDataElementLink{
   link: string;
+  title:string;
 }

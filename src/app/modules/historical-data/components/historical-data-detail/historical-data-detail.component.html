@@ -1,0 +1,15 @@
+<div *ngIf="isShowingDetails" class="fixed w-full h-full bg-red-50 top-0 left-0 flex items-center justify-center" (click)="onCloseModal()">
+
+  <div class="bg-gray-300 w-2/3 p-5 rounded-md z-20" (click)="onEvent($event)">
+    <div class="relative flex justify-end h-0 ">
+      <div class="w-5 h-5 flex items-center justify-center bg-white rounded-md cursor-pointer hover:bg-gray-100" (click)="onCloseModal()">X</div>
+    </div>
+    <div class="pr-5" [innerHTML]="detailInfo.html"></div>
+    <div class="text-lg font-bold">Links</div>
+    <div *ngFor="let link of detailInfo.links">
+        <div class="font-bold">{{link.title}}</div>
+        <a class="cursor-pointer">{{link.link}}</a>
+    </div>
+  </div>
+</div>
+

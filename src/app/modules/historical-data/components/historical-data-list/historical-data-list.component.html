@@ -8,16 +8,24 @@
   <div class="h-96 pb-5"
     [ngClass]="{'grid gap-2 grid-cols-2': visualSelector === 'cards'}">
     <ng-container *ngFor="let each of historicalData.All | slice: currentPage*pageSize : (currentPage+1)*pageSize">
+
       <div
+      class="flex"
       [ngClass]="{
         'bg-gray-400 h-15 p-2 rounded-md': visualSelector === 'cards',
         'h-15 p-1': visualSelector === 'list'
-      }" [innerHTML]="each.html"></div>
+      }">
+        <div [innerHTML]="each.html"></div>
+        <div (click)="onSelectElement(each)" class="cursor-pointer text-blue-300 ml-5">Ver Detalles</div>
+      </div>
     </ng-container>
   </div>
   <app-historical-data-list-pagination [(currentPage)]="currentPage" [totalElements]="getCurrentTotal()"></app-historical-data-list-pagination>
+
 </ng-container>
 <ng-template #loadingTemplate>
   Loading...
 </ng-template>
 
+
+<app-historical-data-detail></app-historical-data-detail>

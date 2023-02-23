@@ -14,7 +14,8 @@ import { HistoricalDataListPaginationComponent } from './components/historical-d
     HistoricalDataListComponent,
     HistoricalDataListFilterComponent,
     HistoricalDataListVisualSelectorComponent,
-    HistoricalDataListPaginationComponent
+    HistoricalDataListPaginationComponent,
+    HistoricalDataDetailComponent
   ],
   imports: [
     CommonModule,

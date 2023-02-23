@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { ApiResponse, ApiResponseData } from '../../interfaces/historical-data.interfaces';
+import { Component, OnInit, ViewChild} from '@angular/core';
+import { ApiResponse, ApiResponseData, ApiResponseDataElement } from '../../interfaces/historical-data.interfaces';
 import { HistoricalDataService } from '../../services/historical-data.service';
+import { HistoricalDataDetailComponent } from '../historical-data-detail/historical-data-detail.component';
 
 @Component({
   selector: 'app-historical-data-list',
@@ -14,6 +14,7 @@ export class HistoricalDataListComponent implements OnInit {
   historicalData!: ApiResponseData;
   visualSelector:string = 'list';
   currentPage:number = 0;
+  @ViewChild(HistoricalDataDetailComponent) modalDetails!: HistoricalDataDetailComponent
 
   constructor(
     private historicalDataService: HistoricalDataService
@@ -29,8 +30,13 @@ export class HistoricalDataListComponent implements OnInit {
     })
   }
 
+
   getCurrentTotal = ():number => {
     return this.historicalData.All?.length || 0;
+  }
+
+  onSelectElement = (element:ApiResponseDataElement):void => {
+    this.modalDetails.open(element);
   }
 
 }

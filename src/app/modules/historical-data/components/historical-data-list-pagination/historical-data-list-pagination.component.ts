@@ -8,10 +8,7 @@ import { HistoricalDataService } from '../../services/historical-data.service';
 })
 export class HistoricalDataListPaginationComponent implements OnInit {
 
-  @Input() currentPage:number = 0;
-  @Input() totalElements!:number;
 
-  @Output() currentPageChange:EventEmitter<number> = new EventEmitter();
 
   constructor(
     private historicalDataService:HistoricalDataService
@@ -21,18 +18,19 @@ export class HistoricalDataListPaginationComponent implements OnInit {
     return this.historicalDataService.pageSize;
   }
 
+  get currentPage():number{
+    return this.historicalDataService.currentPage;
+  }
+
   ngOnInit(): void {
   }
 
   onPreviousPage = ():void => {
-    this.currentPage > 0 ? this.currentPage-- : this.currentPage = 0;
-    this.currentPageChange.next(this.currentPage);
+    this.historicalDataService.previousPage();
   }
 
   onNextPage = ():void => {
-    const maxPage =  Math.ceil((this.totalElements + this.pageSize - 1) / this.pageSize);
-    this.currentPage < maxPage ? this.currentPage++ : this.currentPage = maxPage;
-    this.currentPageChange.next(this.currentPage);
+    this.historicalDataService.nextPage();
   }
 
 }

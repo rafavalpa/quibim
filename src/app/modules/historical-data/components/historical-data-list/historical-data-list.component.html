@@ -1,31 +1,37 @@
 
-<div class="flex justify-between">
-  <app-historical-data-list-filter></app-historical-data-list-filter>
-  <app-historical-data-list-visual-selector [(visualSelector)]="visualSelector"></app-historical-data-list-visual-selector>
-</div>
-<div class="my-2"></div>
-<ng-container *ngIf="historicalData">
-  <div class="h-96 pb-5"
-    [ngClass]="{'grid gap-2 grid-cols-2': visualSelector === 'cards'}">
-    <ng-container *ngFor="let each of historicalData.All | slice: currentPage*pageSize : (currentPage+1)*pageSize">
 
+<ng-container *ngIf="showedHistoricalData; else loadingTemplate">
+
+
+  <app-historical-data-list-dates-filter></app-historical-data-list-dates-filter>
+
+
+  <div class="flex justify-between my-5">
+    <app-historical-data-list-type-selector></app-historical-data-list-type-selector>
+    <app-historical-data-list-visual-selector [(visualSelector)]="visualSelector"></app-historical-data-list-visual-selector>
+  </div>
+
+  <div class="h-[500px] pb-10"
+    [ngClass]="{'grid gap-2 grid-cols-2': visualSelector === 'cards'}">
+    <ng-container *ngFor="let each of showedHistoricalData">
       <div
-      class="flex"
-      [ngClass]="{
-        'bg-gray-400 h-15 p-2 rounded-md': visualSelector === 'cards',
-        'h-15 p-1': visualSelector === 'list'
-      }">
+        [ngClass]="{
+          'bg-gray-100 p-3 py-1 rounded-md': visualSelector === 'cards',
+          'flex p-1 gap-1': visualSelector === 'list'
+        }">
         <div [innerHTML]="each.html"></div>
-        <div (click)="onSelectElement(each)" class="cursor-pointer text-blue-300 ml-5">Ver Detalles</div>
+        <div (click)="onSelectElement(each)" class="cursor-pointer text-blue-300 text-right">Ver Detalles</div>
       </div>
     </ng-container>
   </div>
-  <app-historical-data-list-pagination [(currentPage)]="currentPage" [totalElements]="getCurrentTotal()"></app-historical-data-list-pagination>
+  <app-historical-data-list-pagination></app-historical-data-list-pagination>
 
 </ng-container>
+
 <ng-template #loadingTemplate>
   Loading...
 </ng-template>
 
-
 <app-historical-data-detail></app-historical-data-detail>
+
+

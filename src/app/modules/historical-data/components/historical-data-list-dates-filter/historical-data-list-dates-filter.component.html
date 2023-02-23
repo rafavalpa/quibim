@@ -1,0 +1,13 @@
+
+<div class="flex justify-start">
+  <select [(ngModel)]="datesTypeFilter.filter" (ngModelChange)="toggleDatesTypeFilter($event)">
+    <option [ngValue]="'FixedDate'">Fecha exacta</option>
+    <option [ngValue]="'AfterDate'">Después del día</option><!--
+    <option [ngValue]="'BeforeDate'">Fecha Exacta</option>
+    <option [ngValue]="'BetweenDates'">Entre dos fechas</option>-->
+  </select>
+  <div class="flex gap-3">
+    <input type="date" [ngModel]="datesTypeFilter.date | date:'yyyy-MM-dd'" (ngModelChange)="onDateChange($event)">
+    <input type="date" [ngModel]="datesTypeFilter.lastDate | date:'yyyy-MM-dd'" (ngModelChange)="onLastDateChange($event)" *ngIf="datesTypeFilter.filter === 'BetweenDates'">
+  </div>
+</div>

@@ -23,3 +23,9 @@ export interface ApiResponseDataElementLink{
   link: string;
   title:string;
 }
+
+export interface DatesTypeFilter{
+  filter:string,
+  date:string,
+  lastDate:string
+}

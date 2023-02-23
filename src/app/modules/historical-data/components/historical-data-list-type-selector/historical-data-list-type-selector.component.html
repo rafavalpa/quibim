@@ -1,0 +1,14 @@
+<div class="flex gap-3">
+  <div class="p-5 py-2 rounded-md cursor-pointer" [ngClass]="{'bg-gray-200': typeSelector === 'All'}" (click)="toggleTypeSelector('All')">
+    Todos
+  </div>
+  <div class="p-5 py-2 rounded-md cursor-pointer" [ngClass]="{'bg-gray-200': typeSelector === 'Events'}" (click)="toggleTypeSelector('Events')">
+    Eventos
+  </div>
+  <div class="p-5 py-2 rounded-md cursor-pointer" [ngClass]="{'bg-gray-200': typeSelector === 'Births'}" (click)="toggleTypeSelector('Births')">
+    Nacimientos
+  </div>
+  <div class="p-5 py-2 rounded-md cursor-pointer" [ngClass]="{'bg-gray-200': typeSelector === 'Deaths'}" (click)="toggleTypeSelector('Deaths')">
+    Muertes
+  </div>
+</div>

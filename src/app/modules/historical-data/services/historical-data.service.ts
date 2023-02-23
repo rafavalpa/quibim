@@ -23,6 +23,17 @@ export class HistoricalDataService {
   });
   private _showedHistoricalData$:BehaviorSubject<ApiResponseDataElement[]> = new BehaviorSubject<ApiResponseDataElement[]>([]);
 
+  constructor(
+    private http: HttpClient
+  ) {
+    this.fetchBasicHistoricalData();
+  }
+
+  get previousHistoricalDataValue(){
+    const value = (this._historicalData$.getValue() as any);
+    return value;
+  }
+
   get showedHistoricalData$():Observable<ApiResponseDataElement[]>{
     return this._showedHistoricalData$.asObservable();
   }
@@ -41,12 +52,12 @@ export class HistoricalDataService {
     this.recalculateShowedHistoricalData();
   }
 
-  previousPage = () =>{
+  previousPage = ():void =>{
     this._currentPage > 0 ? this._currentPage-- : this._currentPage = 0;
     this.recalculateShowedHistoricalData();
   }
 
-  nextPage = () =>{
+  nextPage = ():void =>{
     const totalElementsOfType = this.previousHistoricalDataValue[this.typeFilter].length;
     const maxPage =  Math.floor(totalElementsOfType / this.pageSize);
     if(this._currentPage === maxPage && this._datesTypeFilter.filter === 'AfterDate'){
@@ -95,13 +106,6 @@ export class HistoricalDataService {
     return url;
   }
   // END TYPE_FILTER
-
-
-  constructor(
-    private http: HttpClient
-  ) {
-    this.fetchBasicHistoricalData();
-  }
 
   recalculateShowedHistoricalData = () => {
     let  value = this.previousHistoricalDataValue[this.typeFilter];
@@ -155,12 +159,6 @@ export class HistoricalDataService {
         this._historicalData$.next(mergedValues);
         this.recalculateShowedHistoricalData();
       });
-  }
-
-
-  get previousHistoricalDataValue(){
-    const value = (this._historicalData$.getValue() as any);
-    return value;
   }
 
 }

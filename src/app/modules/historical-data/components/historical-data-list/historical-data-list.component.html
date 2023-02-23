@@ -1,1 +1,23 @@
-<p>historical-data-list works!</p>
+
+<div class="flex justify-between">
+  <app-historical-data-list-filter></app-historical-data-list-filter>
+  <app-historical-data-list-visual-selector [(visualSelector)]="visualSelector"></app-historical-data-list-visual-selector>
+</div>
+<div class="my-2"></div>
+<ng-container *ngIf="historicalData">
+  <div class="h-96 pb-5"
+    [ngClass]="{'grid gap-2 grid-cols-2': visualSelector === 'cards'}">
+    <ng-container *ngFor="let each of historicalData.All | slice: currentPage*pageSize : (currentPage+1)*pageSize">
+      <div
+      [ngClass]="{
+        'bg-gray-400 h-15 p-2 rounded-md': visualSelector === 'cards',
+        'h-15 p-1': visualSelector === 'list'
+      }" [innerHTML]="each.html"></div>
+    </ng-container>
+  </div>
+  <app-historical-data-list-pagination [(currentPage)]="currentPage" [totalElements]="getCurrentTotal()"></app-historical-data-list-pagination>
+</ng-container>
+<ng-template #loadingTemplate>
+  Loading...
+</ng-template>
+

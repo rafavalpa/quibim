@@ -1,0 +1,8 @@
+<div class="flex gap-3">
+  <div class="p-5 py-2 rounded-md cursor-pointer" [ngClass]="{'bg-gray-200': visualSelector === 'list'}" (click)="toggleVisualSelector('list')">
+    Lista
+  </div>
+  <div class="p-5 py-2 rounded-md cursor-pointer" [ngClass]="{'bg-gray-200': visualSelector === 'cards'}" (click)="toggleVisualSelector('cards')">
+    Cartas
+  </div>
+</div>

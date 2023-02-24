@@ -5,9 +5,9 @@ import { HistoricalDataListComponent } from './components/historical-data-list/h
 import { HistoricalDataDetailComponent } from './components/historical-data-detail/historical-data-detail.component';
 import { HistoricalDataListVisualSelectorComponent } from './components/historical-data-list-visual-selector/historical-data-list-visual-selector.component';
 import { HistoricalDataListPaginationComponent } from './components/historical-data-list-pagination/historical-data-list-pagination.component';
-import { HistoricalDataListTypeSelectorComponent } from './components/historical-data-list-type-selector/historical-data-list-type-selector.component';
 import { HistoricalDataListDatesFilterComponent } from './components/historical-data-list-dates-filter/historical-data-list-dates-filter.component';
 import { FormsModule } from '@angular/forms';
+import { HistoricalDataListTypeFilterComponent } from './components/historical-data-list-type-filter/historical-data-list-type-filter.component';
 
 
 
@@ -17,7 +17,7 @@ import { FormsModule } from '@angular/forms';
     HistoricalDataListVisualSelectorComponent,
     HistoricalDataListPaginationComponent,
     HistoricalDataDetailComponent,
-    HistoricalDataListTypeSelectorComponent,
+    HistoricalDataListTypeFilterComponent,
     HistoricalDataListDatesFilterComponent
   ],
   imports: [

@@ -1,0 +1,14 @@
+<div class="flex gap-3">
+  <div class="p-5 py-2 rounded-md cursor-pointer" [ngClass]="{'bg-gray-200': typeFilter === 'All'}" (click)="toggleTypeFilter('All')">
+    Todos
+  </div>
+  <div class="p-5 py-2 rounded-md cursor-pointer" [ngClass]="{'bg-gray-200': typeFilter === 'Events'}" (click)="toggleTypeFilter('Events')">
+    Eventos
+  </div>
+  <div class="p-5 py-2 rounded-md cursor-pointer" [ngClass]="{'bg-gray-200': typeFilter === 'Births'}" (click)="toggleTypeFilter('Births')">
+    Nacimientos
+  </div>
+  <div class="p-5 py-2 rounded-md cursor-pointer" [ngClass]="{'bg-gray-200': typeFilter === 'Deaths'}" (click)="toggleTypeFilter('Deaths')">
+    Muertes
+  </div>
+</div>

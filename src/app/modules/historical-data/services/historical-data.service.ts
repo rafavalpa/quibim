@@ -2,20 +2,14 @@ import { Injectable } from '@angular/core';
 import { filter, map, Observable, BehaviorSubject, Subject, take } from 'rxjs';
 import { ApiResponse, ApiResponseData, ApiResponseDataElement, DatesTypeFilter } from '../interfaces/historical-data.interfaces';
 import { HttpClient } from '@angular/common/http';
+import { HistoricalDataListDatesFilterService } from '../components/historical-data-list-dates-filter/historical-data-list-dates-filter.service';
+import { HistoricalDataListPaginationService } from '../components/historical-data-list-pagination/historical-data-list-pagination.service';
+import { HistoricalDataListTypeFilterService } from '../components/historical-data-list-type-filter/historical-data-list-type-filter.service';
 
 @Injectable()
 export class HistoricalDataService {
 
-  private _lastDate!:Date;
-  private _typeFilter: string = 'All';
-  private _datesTypeFilter:DatesTypeFilter  = {
-    filter:'FixedDate',
-    date:new Date().toISOString().split('T')[0],
-    lastDate:new Date().toISOString().split('T')[0]
-  };
   private _baseUrl: string = "https://history.muffinlabs.com/date";
-  private _pageSize:number = 10;
-  private _currentPage:number = 0;
   private _historicalData$:BehaviorSubject<ApiResponseData> = new BehaviorSubject<ApiResponseData>({
     Events:[],
     Births:[],
@@ -24,97 +18,28 @@ export class HistoricalDataService {
   private _showedHistoricalData$:BehaviorSubject<ApiResponseDataElement[]> = new BehaviorSubject<ApiResponseDataElement[]>([]);
 
   constructor(
-    private http: HttpClient
-  ) {
-    this.fetchBasicHistoricalData();
-  }
-
-  get previousHistoricalDataValue(){
-    const value = (this._historicalData$.getValue() as any);
-    return value;
-  }
+    private http: HttpClient,
+    private historicalDataListDatesFilterService:HistoricalDataListDatesFilterService,
+    private historicalDataListTypeFilterService:HistoricalDataListTypeFilterService,
+    private historicalDataListPaginationService:HistoricalDataListPaginationService
+  ) {}
 
   get showedHistoricalData$():Observable<ApiResponseDataElement[]>{
     return this._showedHistoricalData$.asObservable();
   }
 
-  // PAGINATION
-  get pageSize():number{
-    return this._pageSize;
+  getTotalElements = ():number =>{
+    return this.historicalDataListTypeFilterService.filterByType(this._historicalData$.getValue()).length;
   }
-
-  get currentPage():number{
-    return this._currentPage;
-  }
-
-  set currentPage(newCurrentPage){
-    this._currentPage = newCurrentPage;
-    this.recalculateShowedHistoricalData();
-  }
-
-  previousPage = ():void =>{
-    this._currentPage > 0 ? this._currentPage-- : this._currentPage = 0;
-    this.recalculateShowedHistoricalData();
-  }
-
-  nextPage = ():void =>{
-    const totalElementsOfType = this.previousHistoricalDataValue[this.typeFilter].length;
-    const maxPage =  Math.floor(totalElementsOfType / this.pageSize);
-    if(this._currentPage === maxPage && this._datesTypeFilter.filter === 'AfterDate'){
-      this._currentPage++;
-      this.fetchNextDayHistoricalData();
-      return;
-    }
-    this._currentPage < maxPage ? this._currentPage++ : this._currentPage = maxPage;
-    this.recalculateShowedHistoricalData();
-  }
-  // END PAGINATION
-
-
-  // TYPE_FILTER
-  get typeFilter():string{
-    return this._typeFilter;
-  }
-
-  set typeFilter(newTypeFilter:string){
-    this.currentPage = 0;
-    this._typeFilter = newTypeFilter;
-    this.recalculateShowedHistoricalData();
-  }
-  // END TYPE_FILTER
-
-
-  // DATES_FILTER
-  get datesTypeFilter():DatesTypeFilter{
-    return this._datesTypeFilter;
-  }
-
-  set datesTypeFilter(newDatesTypeFilter:DatesTypeFilter){
-    this.currentPage = 0;
-    this._datesTypeFilter = newDatesTypeFilter;
-    this.fetchBasicHistoricalData();
-  }
-
-  convertDateToUrl = (date:string) => {
-    this._lastDate = new Date(date);
-    return date.split('-')[1]+'/'+date.split('-')[2];
-  }
-
-  calculateDateUrl = (date:string):string => {
-    let url = this._baseUrl;
-    url = url + '/' + this.convertDateToUrl(date);
-    return url;
-  }
-  // END TYPE_FILTER
 
   recalculateShowedHistoricalData = () => {
-    let  value = this.previousHistoricalDataValue[this.typeFilter];
-    value = value.slice(this._currentPage*10, (this._currentPage+1)*10);
-    this._showedHistoricalData$.next(value);
+    const typedData = this.historicalDataListTypeFilterService.filterByType(this._historicalData$.getValue());
+    const paginatedData = this.historicalDataListPaginationService.filterByPage(typedData)
+    this._showedHistoricalData$.next(paginatedData);
   }
 
   fetchBasicHistoricalData():void{
-    const url = this.calculateDateUrl(this._datesTypeFilter.date);
+    const url = this.historicalDataListDatesFilterService.calculateDateUrl(this._baseUrl);
     this.http.get<ApiResponse>(url)
       .pipe(
         map((response:ApiResponse)=> response.data),
@@ -133,10 +58,17 @@ export class HistoricalDataService {
   }
 
   fetchNextDayHistoricalData():void{
-    const dateObject = new Date(this._lastDate);
-    this._lastDate = dateObject;
-    const nextDay = new Date(dateObject.setDate(dateObject.getDate()+1)).toISOString().split('T')[0];
-    const url = this.calculateDateUrl(nextDay);
+    const url = this.historicalDataListDatesFilterService.calculateNextDayDateUrl(this._baseUrl);
+    this.fetchOtherDayHistoricalData(url);
+  }
+
+  fetchPreviousDayHistoricalData():void{
+    const url = this.historicalDataListDatesFilterService.calculatePreviousDayDateUrl(this._baseUrl);
+    this.fetchOtherDayHistoricalData(url);
+  }
+
+
+  fetchOtherDayHistoricalData(url:string):void{
     this.http.get<ApiResponse>(url)
       .pipe(
         map((response:ApiResponse)=> response.data),
@@ -162,3 +94,4 @@ export class HistoricalDataService {
   }
 
 }
+

@@ -27,5 +27,5 @@ export interface ApiResponseDataElementLink{
 export interface DatesTypeFilter{
   filter:string,
   date:string,
-  lastDate:string
+  untilDate:string
 }

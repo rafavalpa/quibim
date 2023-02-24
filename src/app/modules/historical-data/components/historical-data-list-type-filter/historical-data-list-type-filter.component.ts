@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter  } from '@angular/core';
 import { HistoricalDataService } from '../../services/historical-data.service';
+import { HistoricalDataListTypeFilterService } from './historical-data-list-type-filter.service';
 
 @Component({
   selector: 'app-historical-data-list-type-filter',
@@ -9,17 +10,20 @@ import { HistoricalDataService } from '../../services/historical-data.service';
 export class HistoricalDataListTypeFilterComponent implements OnInit {
 
 
-  typeFilter:string = this.historicalDataService.typeFilter;
+  typeFilter:string = 'All';
 
-  constructor(private historicalDataService: HistoricalDataService) { }
+  constructor(
+    private historicalDataListTypeFilterService: HistoricalDataListTypeFilterService,
+    private historicalDataService: HistoricalDataService
+    ) { }
 
   ngOnInit(): void {
   }
 
-
   toggleTypeFilter = (value:string) => {
     this.typeFilter = value;
-    this.historicalDataService.typeFilter = value;
+    this.historicalDataListTypeFilterService.typeFilter = this.typeFilter;
+    this.historicalDataService.recalculateShowedHistoricalData();
   }
 
 }
